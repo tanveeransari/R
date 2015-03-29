@@ -1,0 +1,31 @@
+.DS_Store
+.cache/
+.RData
+
+# History files
+.Rhistory
+.Rapp.history
+
+# Example code in package build process
+*-Ex.R
+
+# RStudio files
+.Rproj.user/
+
+# produced vignettes
+vignettes/*.html
+vignettes/*.pdf
+#html stuff
+*.js
+*.html
+*.gif
+*.jpg
+*.png
+*.css
+
+*.csv
+*.pdf
+*.lnk
+*.zip
+*logo*
+HW/
