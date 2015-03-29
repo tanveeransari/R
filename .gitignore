@@ -29,3 +29,4 @@ vignettes/*.pdf
 *.zip
 *logo*
 HW/
+.Rproj.user
