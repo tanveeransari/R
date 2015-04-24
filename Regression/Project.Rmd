@@ -1,15 +1,18 @@
 ---
 title: "Regression Models - Course Project"
 output: pdf_document
+fontsize: 10pt
 ---
+1)Use the FONT HTML tag in your markdown to change fontsize.
+2)Use the stargazer package in R to make journal-quality, side-by-side regression tables. 
+Works best in LaTeX, but even the markdown tables look nice.
+3)Be sure to use the message=FALSE and warning=FALSE options in your R code chunks. You don't want to waste any space printing things like warnings and package-loading messages.
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r}
-summary(cars)
-```
+1)First page,  all text,  no code.  1/4 page exec summary and 1/4 page results, including interpretation of model. 1/2 page description of analytic approach and steps taken. 
+2)Second page,  all code and output - mostly output
+T3)hird page, just a big pairs plot,  color set to a certain factor variable of interest.
+4)Fourth page, has 3 plots that explore the relationship of the chosen model's predictor variables to outcome. FYI,  number of plots is not necessaily related to number of predictors. 
+5)Fifth page,  the four residual plots supported by lm object, and colored by a factor variable of interest. 
 
 You can also embed plots, for example:
 
