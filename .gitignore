@@ -24,5 +24,7 @@ vignettes/*.pdf
 *.zip
 *logo*
 HW/
+hw[0-9]/
+RepData_PeerAssessment[0-9]
 .Rproj.user
 .httr-oauth
