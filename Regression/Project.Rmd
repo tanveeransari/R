@@ -1,6 +1,6 @@
 ---
 title: "Regression Models - Course Project"
-output: pdf_document
+output: html_document
 fontsize: 10pt
 ---
 1)Use the FONT HTML tag in your markdown to change fontsize.
