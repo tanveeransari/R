@@ -1,11 +1,10 @@
 ---
 title: "Regression Models - Course Project"
+geometry: margin=2cm
 output: pdf_document
 fontsize: 10pt
 ---
-
-
-```{r echo=FALSE,message=FALSE,warning=FALSE,error=FALSE}
+```{r echo=FALSE,message=FALSE,warning=FALSE,error=FALSE,cache=TRUE}
 require(GGally);require(car);
 data(mtcars);
 all<-lm(mpg~.,mtcars)
@@ -14,7 +13,11 @@ wthp<-lm(mpg~wt+hp,mtcars)
 wthpam<-lm(mpg~wt+hp+am,mtcars)
 wthpqsecam<-lm(mpg~wt+hp+qsec+am,mtcars)
 wthpqsecamdspl<-lm(mpg~wt+hp+qsec+am+disp,mtcars)
-models<-list("all"=all,"wthp"=wthp,"wthpam"=wthpam,"wthpqsecam"=wthpqsecam,"wthpqsecamdspl"=wthpqsecamdspl)
+models<-list("all"=all,
+             "wthp"=wthp,
+             "wthpam"=wthpam,
+             "wthpqsecam"=wthpqsecam,
+             "wthpqsecamdspl"=wthpqsecamdspl)
 
 modeladjrsquare<-sapply(models,function(x){summary(x)$adj.r.squared})
 names(modeladjrsquare)<-names(models)
@@ -24,101 +27,107 @@ names(modeladjrsquare)<-names(models)
 Analysis to answer the following two questions based on a motor vehicle data set.  
 1) "Is an automatic or manual transmission better for MPG"  
 2) "How different is the MPG between automatic manual transmission?"  
-
-Multiple regression models were evaluated and used to answer the above questions.
+Several regression models were evaluated, compared for accuracy and used to answer the above questions.
 
 ## Results
-Detailed analysis with the dataset revealed that transmission type DOES NOT have
-a statistically significant effect on gas mileage. 
+Detailed analysis with the dataset revealed we cannot find a statistically significant effect of 
+transmission type on gas mileage(mpg).
 
-The estimate of improved gas mileage of manual transmission over automatic is 2.08 mpg, 
-when using a model with wt,hp and transmission as the predictors. However the effect of   
-transmission cannot be considered significant since its p-value is 0.14 - not enough 
-to reject the null hypothesis that transmission has no effect on mpg.
+The slope coefficient of am is 2.08 with a **p value of 0.14** in a model using wt,hp and am.
+This p value is not enough to to reject the null hypothesis that transmission has no effect on mpg.
+If the p-value had been found to be lower than our significance level this slope of 2.08
+would represent improvement in gas mileage of manual transmission over automatic transmission vehicles,
+answering question 2. However this slope currently does not mean anything significant.
 
 Weight and horsepower were found to be the two most significant factors in estimating mpg 
 with p values close to zero.
+
 ## Description of analysis done
 Initially a multivariable regression was done with all available data to serve as a baseline.
-The adjusted Rsquare was found to be 0.8066 . This analysis is not ideal as it does not 
-address multicollinearity, and includes several variables that ought not to affect mpg.  
+This analysis is not ideal as it does not address multicollinearity, and includes several variables that ought not to affect mpg.  
 
 ###Model Selection
 From studying several semesters of automobile engineering during B.Tech(Mechanical) I can classify the factors as YES/NO/MAYBE  [Expert Opinion]
 
-NO: Axle ratios, Gear/Carburetor/Cylinder count, V/Straight engine layout, will not affect mpg.
-YES: Weight and horsepower(hp) definitely affect mpg. To produce more power more gas is burnt.  
-Energy expended to move a mass is directly proportional to its mass.  
-MAYBE:  Quarter mile time  can be considered but would be expected to show collinearity with hp.  
-Engine displacement(size) only has an indirect effect on power and not a very linear one. This is due to dependencies on other factors not included in the data. However it was evaluated.
+NO: Axle ratios, Gear/Carburetor/Cylinder count, V/Straight engine layout, will not affect mpg.  
+YES: Weight and horsepower(hp) definitely affect mpg. To produce more power more gas is burnt. 
+Energy expended to move a Weight is directly proportional to its Weight.  
+MAYBE:  Quarter mile time  can be considered but would be expected to show collinearity with hp. 
+Engine displacement(size) only has an indirect effect on power and not a very linear one. However it was evaluated.
 
-###Exploratory Analysis
-A pairs plot of the factors considered possibly relevant is shown in appendix.  
+####Exploratory Analysis
+A pairs plot of the factors considered possibly relevant is shown in [appendix](#appendix)  
 This shows a high negative correlation between mpg vs weight, displacement & hp.
-Displacement is also highly correlated with weight[0.89] and hp[0.79] 
+Displacement is also highly correlated with weight[0.89] and hp[0.79]
 
-####Variance Inflation Factors
-```{r echo=FALSE}
-vif(all)
-```
+Four additional models were constructed. The model names reflect the factors they include  
+**wthp | wthpam | wthpqsecam | wthpqsecamdspl  **
 
-cyl, disp and weight showed the highest variance inflation factors in a model including  
-all variables indicating possible collinearity. This also makes intuitive sense since  
-larger displacement engines have more cylinders and are heavier.
+For instance wthp uses wt and hp, wthpam uses wt,hp and am and so on.
 
-Four additional models were constructed. The model names reflect their factors  
-wthp | wthpam | wthpqsecam |wthpqsecamdspl|  
-
-for instance wthp uses wt and hp, wthpam uses wt,hp and am and so on.  
-
-First examine their adjusted R squared. The adjusted R square statistic, unlike R square, penalizes for using more variables.  
-
-#### Adjusted R Square of different models
-```{r adjrsqcomp, echo=FALSE}
+####Adjusted R Square of different models
+```{r adjrsqcomp, echo=FALSE,cache=TRUE}
 modeladjrsquare
 ```
+Adjusted r square values showed  improvement in using wt&hp over using all variables. 
+Adding in am and qsec also improved adj.r.square but adding displ barely improved it.
 
-Examining the adjusted r square values showed a major improvement in using just wt&hp 
-over using all available variables. 
+p value for the F statistic of the fitted models to examine model significance
+```{r Fstat,echo=FALSE,message=F,warning=F,error=FALSE,cache=TRUE}
+sapply(models,function(x){f<-summary(x)$fstatistic;
+                          p<-pf(f[1],f[2],f[3],lower.tail=F)
+                          attributes(p)<-NULL
+                          p})
+```
+The model with just wt and hp seems most significant from its lowest p value. 
+This implies that Weight and Horsepower seem to explain most of the variation in mpg. 
 
-The benefit of adding in am was minor [0.0078961] indicating that transmission may not  
-be a big facator in predicting mpg.   
-If using both qsecandam there was a tiny bit better adj.r.squared. 
-Adding in displ did almost nothing to improve this, validating our earlier assumption 
-that if horsepower is already factored in, displacement is not a significant predictor.
+####Evaluate collinearity using Variance Inflation Factors
+```{r echo=FALSE,cache=TRUE}
+vif(all)
+```
+cyl, disp and weight showed the highest variance inflation factors indicating possible collinearity. 
+This also makes intuitive sense since larger displacement engines often have more cylinders, 
+are heavier and are typically installed in heavier vehicles. In the model with all variables 
+cyl and displ coefficients have p values of 0.91 and 0.46, indicating they are not significant. 
+Remove the models using cyl and dspl from consideration.
 
-Weight and Horsepower seem to explain most of the variation in mpg. This was examined
-using anova, which showed no significant benefit in adding in transmission type.
-
-```{r anova, echo=FALSE}
-anova(wthp,wthpam,wthpqsecam,wthpqsecamdspl)
+```{r anova, echo=FALSE,cache=TRUE}
+models$wthpqsecamdspl<-NULL
+anova(wthp,wthpam,wthpqsecam)
 ```
 
-The p value for adding am to mpg+wt is quite high -  0.12590. This is not good enough 
-to reject the null hyphothesis - that the transmission does not have a significant effect on mpg.
+From the anova results, p value for adding am to wt+hp [0.12590] is higher than our significance level - 
+adding am to a model having wt+hp does not improve the model significantly. Adding qsec to the 
+wthpam model did not improve it either [p value 0.076].
 
-As a last step we examine a model using wt, hp and am and examine its coefficients
-
-```{r summarycoeffs, echo=FALSE}
+####Model coefficients
+```{r summarycoeffs, echo=FALSE,cache=TRUE}
 summary(wthpam)$coefficients
 ```
-The transmission type has a slope of 2.08 which would have been its effect on mpg if  
-it was significant. However its p value is 0.14 which is much much higher than permissible.
-We must conclude that the trasmission type has no significant effect on gas mileage.
+The p value for am is 0.14 which is much much higher than permissible(0.01 or even 0.05).
+**Based on the p-value and anova results we conclude that the trasmission type has no significant effect on gas mileage.**
 
+wt and hp have a significant effect on mileage a model having just wt and hp is finalized.
+
+Model [residuals](#residuals) do not show any pattern in their scatter which is good.
+The residuals do show some skew in their [distribution](#distribution)
+but for such a small sample size we can ignore this.
 
 ## Appendix
 
-```{r exploratory,echo=FALSE,warning=FALSE,error=F, fig.width=10,fig.height=15}
+```{r echo=FALSE,warning=FALSE,error=F, fig.width=10,fig.height=15,cache=TRUE}
 ggpairs(c(1,3,4,6,7,9),data=mtcars,lower=list(continous="smooth",params=c(method="loess")))
 ```
 
+### <a name="residuals"/> Residuals of model with weight and horsepower
 
-
-### Residuals of model with weight and horsepower only
-
-
-```{r residualplot, echo=FALSE,warning=FALSE,error=F, fig.width=10}
+```{r residualplot, echo=FALSE,warning=FALSE,error=F, fig.width=10,fig.height=15,cache=TRUE}
 par(mfrow=c(2,2))
 plot(wthp)
+```
+
+### <a name="distribution"/>Distribution of residuals
+```{r residualshist, echo=F,warning=F,error=F,fig.width=10,cache=TRUE}
+hist(wthp$residuals,col="blue",xlab="Residuals",main="Residuals of model with wt and hp")
 ```
