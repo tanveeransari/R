@@ -10,7 +10,7 @@ summary(lm(y~x)) #Read p values from here
 ###----ANSWER : p-value: 0.05296
 #-------------QUESTION 2------------------------------
 #Consider the previous problem, give the estimate of the residual standard deviation.
-###----ANSWER - From summary in Q1 read 
+###----ANSWER - From summary in Q1 read
 #Residual standard error: 0.223 on 7 degrees of freedom
 
 #------------Question 3
@@ -23,7 +23,7 @@ fit<-lm(ympg~xwt);sumCoef<-summary(fit)$coeffecients
 # slopeCI<-slopeEst + c(-1,1)*qt(0.975,df=fit$df)*slopSerr
 # newx<-seq(min(x),max(x), along.with = x)
 # newRng<-data.frame(x=newx)
-# 
+#
 # beta1<-cor(y,x)*sd(y)/sd(x);beta0=mean(y)-beta1*mean(x);
 # e<-y-beta0-beta1*x
 # seBeta0=((1/n)+(mean(x)^2/ssx)^.5)*sigma
@@ -61,11 +61,12 @@ sumCoef<-summary(fit)$coefficients
 ###----ANSWER : The new intercept would be β^0−cβ^1
 
 #------------Question 9
-#Refer back to the mtcars data set with mpg as an outcome and weight (wt) as the predictor. 
-#About what is the ratio of the the sum of the squared errors, ∑ni=1(Yi−Y^i)2 when comparing a model with just an intercept (denominator) to the model with the intercept and slope (numerator)?
+#Refer back to the mtcars data set with mpg as an outcome and weight (wt) as the predictor.
+#About what is the ratio of the the sum of the squared errors, \sum_{i=1}^n (Y_i - \hat Y_i)^2
+# when comparing a model with just an intercept (denominator) to the model with the intercept and slope (numerator)?
 fit<-lm(mpg~wt, data=mtcars);fitnoslope<-lm(mpg~1, data=mtcars)
 #Hint by googling: The sum of squared errors is given by sum(sm$residuals^2)
-###----ANSWER : 
+###----ANSWER :
 sum((summary(fit)$residuals)^2)/sum((summary(fitnoslope)$residuals)^2) =  0.2471672
 
 
@@ -73,5 +74,5 @@ sum((summary(fit)$residuals)^2)/sum((summary(fitnoslope)$residuals)^2) =  0.2471
 #Do the residuals always have to sum to 0 in linear regression?
 #The residuals must always sum to zero - WRONG
 # The residuals never sum to zero.    - WRONG
-###----ANSWER If an intercept is included, then they will sum to 0. 
+###----ANSWER If an intercept is included, then they will sum to 0.
 ###----               Statement from Lesson01_06  Page 3/17 [Properties of the residuals]
