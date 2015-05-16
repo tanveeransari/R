@@ -2,12 +2,11 @@
 #Only worked with list = F
 #----------------------------------
 #Q2
-#Question is wrong
+# Doing a summary after doing log shows -Inf
+#WRONG: The SuperPlasticizer data include negative values so the log transform can not be performed.
+#WRONG : The log transform produces negative values which can not be used by some classifiers.
 #----------------------------------
 #Q3
-# Doing a summary after doing log shows -Inf
-#----------------------------------
-#Q4
 library(caret)
 library(AppliedPredictiveModeling)
 set.seed(3433)
@@ -27,12 +26,12 @@ smallTrain<-training[,ilNames]
 # From https://tgmstat.wordpress.com/2013/11/28/computing-and-visualizing-pca-in-r/
 trans<-preProcess(smallTrain, method=c("pca"), thresh = 0.8)
 trans$rotation
-#rotation provides representation of the OLD variables in terms of the 
-# principal components. - shows PC1 to PC7 so 
+#rotation provides representation of the OLD variables in terms of the
+# principal components. - shows PC1 to PC7 so
 #Answer 7
 #----------------------------------
 
-#Q5
+#Q4
 
 set.seed(3433)
 data(AlzheimerDisease)
