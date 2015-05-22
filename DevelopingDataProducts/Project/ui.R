@@ -1,4 +1,4 @@
-require(shiny);require(googleVis);
+require(shiny);
 
 shinyUI(fluidPage(
   titlePanel("Predict mpg by weight and horsepower"),
@@ -20,12 +20,20 @@ shinyUI(fluidPage(
       hr(),
       h3("Explanation"),
       p("This page fits a linear model to the mtcars dataset in the base package"),
-      p("It then uses the fitted linear model to predict mpg"),
-      code("fit<-lm(mpg~disp+hp+wt+qsec, data=mtcars)"),
+      code("cars <- mtcars"),
       br(),
-      code("x<-as.data.frame(t(colMeans(cars)))"),
       br(),
-      code("x$mpg<-predict(fit, newdata=x)"),
+      code("fit <- lm(mpg~disp+hp+wt+qsec, data=mtcars)"),
+      br(),
+      p("It uses the fitted linear model(fit) to predict mpg"),
+      br(),
+      code("x <- as.data.frame(t(colMeans(cars)))"),
+      br(),
+      p(" x is the input data frame used for prediction."),
+      br(),
+      code("x$mpg <- predict(fit, newdata=x)"),
+      br(),
+      p(" The sliders change wt and hp values for x"),
       br(),
       div("You can predict Mpg by varying the Weight and Horsepower")
     )
