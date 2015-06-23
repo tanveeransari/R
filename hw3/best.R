@@ -12,20 +12,25 @@ best <- function(state, outcome) {
   outComeName=names(allOut)[outComeColNum]
 
   ## Return hospital name in that state with lowest 30-day death rate
-  allOut[,outComeColNum]<-as.numeric(allOut[,outComeColNum])
-  bestOutComeVal <- max(allOut[outComeColNum],na.rm = TRUE)
-  print("bestOutComeVal =");print(bestOutComeVal)
+  suppressWarnings(
+    allOut[,outComeColNum]<-as.numeric(allOut[,outComeColNum])
+  )
+  allOut<-subset(allOut, allOut$State==state)
+  
+  bestOutComeVal <- min(allOut[outComeColNum],na.rm = TRUE)
+#  sprintf("%s  %f","bestOutComeVal =", bestOutComeVal)
   goodHosp<-subset(allOut, !is.na(allOut[outComeName]))
-#   str(goodHosp)
-  bestHosps<-goodHosp[which(goodHosp$outComeName==bestOutComeVal),1]
-  if(length(bestHosps)==1){
-    bestHosps[1]
+  bestHosps<-goodHosp[which(goodHosp[outComeName]==bestOutComeVal),]
+
+  if(nrow(bestHosps)==1){
+    bestHosps$Hospital.Name
   }
   else if(length(bestHosps)>1) {
-    sort(bestHosps)[1]
+    b<-bestHosps[order(bestHosps$Hospital.Name),]
+    b$Hospital.Name
   }
   else
   {
-    bestHosps
+    bestHosps$Hospital.Name
   }
 }
